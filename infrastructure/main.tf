@@ -28,7 +28,7 @@ provider "cloudinit" {
 
 resource "azurerm_resource_group" "cluster" {
   name     = "kluster-group"
-  location = "westus3"
+  location = "eastus"
 }
 
 resource "azurerm_kubernetes_cluster" "cluster" {
@@ -36,12 +36,14 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   location            = azurerm_resource_group.cluster.location
   resource_group_name = azurerm_resource_group.cluster.name
   dns_prefix          = "leaks1"
-  kubernetes_version  = 1.22
+  kubernetes_version  = 1.32
 
   default_node_pool {
+    enable_auto_scaling = true
     name       = "default"
     node_count = 1
     max_count  = 3
+    min_count = 1
     vm_size    = "Standard_B2s"
   }
 
